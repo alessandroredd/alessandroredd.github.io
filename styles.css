@@ -35,7 +35,9 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .category-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
 .category-pill { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 11px 20px; border: 1px solid #000; border-radius: 999px; font-size: 12px; font-weight: 400; line-height: 1.2; letter-spacing: .08em; }
 .pill-fill { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; color: #fff; pointer-events: none; clip-path: inset(0 100% 0 0); transition: none; }
+.category-pill[data-category="all"][aria-current="true"] .pill-fill { clip-path: inset(0 0 0 0); }
 @media (hover: hover) {
+  .category-nav:has(.category-pill:not([data-category="all"]):hover) .category-pill[data-category="all"] .pill-fill { clip-path: inset(0 100% 0 0); transition: none; }
   .category-pill:hover .pill-fill { clip-path: inset(0 0 0 0); transition: clip-path 1.2s cubic-bezier(.45,0,.2,1); }
 }
 .search { display: flex; align-items: center; gap: 10px; width: 220px; min-height: 42px; margin: 0; padding: 0 16px; border: 1px solid #000; border-radius: 999px; }
@@ -52,6 +54,24 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .project-card h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
 .project-card p { margin: 0 0 17px; font-size: 16px; font-weight: 400; line-height: 1.65; color: #333; }
 .card-category { display: inline-block; font-size: 12px; font-weight: 400; line-height: 1.7; letter-spacing: .08em; }
+.project-results { position: relative; }
+.project-results.is-carousel { --carousel-gap: 24px; --carousel-columns: 4; padding: 0 50px; }
+.is-carousel .project-grid { display: flex; align-items: stretch; gap: var(--carousel-gap); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 6px 0 12px; }
+.is-carousel .project-grid::-webkit-scrollbar { display: none; }
+.is-carousel .project-card { flex: 0 0 calc((100% - (var(--carousel-columns) - 1) * var(--carousel-gap)) / var(--carousel-columns)); scroll-snap-align: start; text-align: center; }
+.is-carousel .card-image { padding: 10px; border-radius: 0; background: #f0f0f0; }
+.is-carousel .card-image img { aspect-ratio: .9; }
+.is-carousel .project-card h3 { margin: 20px 0 12px; font-size: 16px; line-height: 1.5; }
+.is-carousel .project-card p { display: none; }
+.is-carousel .card-category { font-size: 11px; color: var(--muted); }
+.carousel-arrow { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin: auto 0; padding: 9px; border: 1px solid #aaa; border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer; transition: border-color .5s, background-color .5s, color .5s, opacity .5s; }
+.carousel-previous { left: 0; }
+.carousel-next { right: 0; }
+.carousel-arrow svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1; transition: transform .6s var(--motion-ease); }
+.carousel-arrow:not(:disabled):hover { border-color: #000; background: #000; color: #fff; }
+.carousel-previous:not(:disabled):hover svg { transform: translateX(-2px); }
+.carousel-next:not(:disabled):hover svg { transform: translateX(2px); }
+.carousel-arrow:disabled { opacity: .25; cursor: default; }
 .empty-state { margin: 80px 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .project-detail { scroll-margin-top: 108px; }
 .project-detail:focus { outline: none; }
@@ -147,6 +167,7 @@ dialog::backdrop { animation: backdrop-in .3s ease-out both; }
   .wordmark { font-size: 24px; }
   .browse-toolbar { gap: 20px; }
   .project-grid { gap: 44px 28px; }
+  .project-results.is-carousel { --carousel-columns: 2; }
   .footer-main { grid-template-columns: 1fr 1fr; gap: 38px 28px; }
   .footer-newsletter { grid-column: 1 / -1; max-width: 570px; }
 }
@@ -167,6 +188,8 @@ dialog::backdrop { animation: backdrop-in .3s ease-out both; }
   .category-pill { font-size: 12px; padding: 11px 14px; }
   .search { width: 100%; }
   .project-grid { grid-template-columns: 1fr; gap: 42px; }
+  .project-results.is-carousel { --carousel-columns: 1; --carousel-gap: 20px; padding: 0 38px; }
+  .carousel-arrow { width: 30px; height: 30px; padding: 5px; }
   .project-card h3 { margin-top: 20px; margin-bottom: 12px; }
   .detail-copy { font-size: 14px; }
   .footer { scroll-margin-top: 66px; }

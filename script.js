@@ -29,6 +29,9 @@ const hero = document.querySelector('.hero');
 const header = document.querySelector('#site-header');
 const latest = document.querySelector('#latest');
 const grid = document.querySelector('#project-grid');
+const projectResults = document.querySelector('#project-results');
+const carouselPrevious = document.querySelector('#carousel-previous');
+const carouselNext = document.querySelector('#carousel-next');
 const detail = document.querySelector('#project-detail');
 const searchInput = document.querySelector('#search-input');
 const pills = [...document.querySelectorAll('.category-pill')];
@@ -46,6 +49,38 @@ let headerFrame = 0;
 let routedURL = location.href;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const categoryHash = value => value === 'all' ? '#latest' : `#${value}`;
+// ALL scorre orizzontalmente; le singole categorie conservano la griglia.
+let carouselFrame = 0;
+function updateCarouselControls() {
+  carouselFrame = 0;
+  const maximum = Math.max(0, grid.scrollWidth - grid.clientWidth);
+  const available = category === 'all' && !detailOpen && maximum > 2;
+  carouselPrevious.hidden = carouselNext.hidden = !available;
+  carouselPrevious.disabled = grid.scrollLeft <= 2;
+  carouselNext.disabled = grid.scrollLeft >= maximum - 2;
+}
+function scheduleCarouselControls() {
+  if (!carouselFrame) carouselFrame = requestAnimationFrame(updateCarouselControls);
+}
+function scrollCarousel(direction) {
+  const card = grid.firstElementChild;
+  if (!card || category !== 'all' || detailOpen) return;
+  const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+  grid.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: motion.reduced() ? 'instant' : 'smooth' });
+}
+carouselPrevious.addEventListener('click', () => scrollCarousel(-1));
+carouselNext.addEventListener('click', () => scrollCarousel(1));
+grid.addEventListener('scroll', scheduleCarouselControls, { passive: true });
+grid.addEventListener('keydown', event => {
+  if (event.target !== grid || category !== 'all' || detailOpen) return;
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    event.preventDefault(); scrollCarousel(event.key === 'ArrowLeft' ? -1 : 1);
+  } else if (event.key === 'Home' || event.key === 'End') {
+    event.preventDefault();
+    grid.scrollTo({ left: event.key === 'Home' ? 0 : grid.scrollWidth, behavior: motion.reduced() ? 'instant' : 'smooth' });
+  }
+});
+new ResizeObserver(scheduleCarouselControls).observe(grid);
 header.hidden = false;
 header.inert = true;
 header.setAttribute('aria-hidden', 'true');
@@ -132,6 +167,18 @@ function renderGrid() {
   const query = searchInput.value.trim().toLocaleLowerCase('it');
   const visible = projects.filter(project => (category === 'all' || project.category === category) && `${project.title} ${project.description} ${project.category}`.toLocaleLowerCase('it').includes(query));
   const signature = `${category}|${query}|${visible.map(project => project.slug).join(',')}`;
+  const carousel = category === 'all';
+  projectResults.classList.toggle('is-carousel', carousel);
+  projectResults.hidden = detailOpen || visible.length === 0;
+  if (carousel) {
+    grid.tabIndex = 0;
+    grid.setAttribute('role', 'region');
+    grid.setAttribute('aria-label', 'Tutti i progetti. Usa le frecce per scorrere la carrellata.');
+    grid.setAttribute('aria-roledescription', 'carrellata');
+  } else {
+    grid.removeAttribute('tabindex'); grid.removeAttribute('role');
+    grid.removeAttribute('aria-label'); grid.removeAttribute('aria-roledescription');
+  }
   grid.replaceChildren(...visible.map((project, index) => {
     if (!cardCache.has(project.slug)) {
       const card = makeCard(project); cardCache.set(project.slug, card); motion.reveal(card, (index % 2) * 85);
@@ -139,6 +186,9 @@ function renderGrid() {
     return cardCache.get(project.slug);
   }));
   grid.hidden = detailOpen;
+  if (gridSignature !== signature) grid.scrollTo({ left: 0, behavior: 'instant' });
+  carouselPrevious.hidden = carouselNext.hidden = true;
+  scheduleCarouselControls();
   if (!detailOpen && gridSignature && gridSignature !== signature) motion.enter(grid, 8, 350);
   gridSignature = signature;
   emptyState.hidden = detailOpen || visible.length > 0;
