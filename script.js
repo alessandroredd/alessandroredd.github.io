@@ -64,41 +64,12 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 window.addEventListener('resize', () => {
   heroHeight = hero.offsetHeight; updateHeader();
-  if (innerWidth > 600 && mobileMenu.open) motion.closeDialog(mobileMenu);
-});
-
-// Sottomenu desktop: stessa dissolvenza del riferimento, accessibili da tastiera.
-document.querySelectorAll('.topbar .nav, .site-header .nav').forEach(nav => {
-  [...nav.children].forEach((link, index) => {
-    const items = projects.filter(project => categoryHash(project.category) === link.getAttribute('href'));
-    if (!items.length) return;
-    const wrapper = document.createElement('div'); wrapper.className = 'nav-item';
-    const submenu = document.createElement('ul'); submenu.className = 'nav-submenu'; submenu.id = `${nav.id}-submenu-${index}`;
-    link.replaceWith(wrapper); wrapper.append(link, submenu);
-    link.setAttribute('aria-haspopup', 'true'); link.setAttribute('aria-expanded', 'false'); link.setAttribute('aria-controls', submenu.id);
-    const addLink = (text, href, all = false) => {
-      const item = document.createElement('li'); const anchor = document.createElement('a');
-      anchor.textContent = text; anchor.href = href;
-      if (all) anchor.className = 'submenu-all';
-      item.append(anchor); submenu.append(item);
-    };
-    addLink(`ESPLORA ${link.textContent}`, link.getAttribute('href'), true);
-    items.forEach(project => addLink(project.title, `#page/${project.slug}`));
-    const toggle = open => { wrapper.dataset.open = String(open); link.setAttribute('aria-expanded', String(open)); };
-    wrapper.addEventListener('mouseenter', () => toggle(true));
-    wrapper.addEventListener('mouseleave', () => toggle(wrapper.contains(document.activeElement)));
-    wrapper.addEventListener('focusin', () => toggle(true));
-    wrapper.addEventListener('focusout', event => { if (!wrapper.contains(event.relatedTarget)) toggle(false); });
-    wrapper.addEventListener('click', () => toggle(false));
-    wrapper.addEventListener('keydown', event => {
-      if (event.key === 'Escape') { event.preventDefault(); link.focus(); toggle(false); }
-    });
-  });
+  if (innerWidth > 800 && mobileMenu.open) motion.closeDialog(mobileMenu);
 });
 
 // Pannello mobile laterale con sottopagine espandibili e ricerca sincronizzata.
 const drawerNav = mobileMenu.querySelector('.drawer-nav');
-document.querySelectorAll('#hero-nav > a, #hero-nav > .nav-item > a').forEach((link, index) => {
+document.querySelectorAll('#hero-nav > a').forEach((link, index) => {
   const group = document.createElement('div'); group.className = 'drawer-group';
   const row = document.createElement('div'); row.className = 'drawer-row';
   const anchor = document.createElement('a'); anchor.href = link.getAttribute('href'); anchor.textContent = link.textContent;
@@ -252,7 +223,7 @@ showRoute(false);
 if (window.location.hash && window.location.hash !== '#home') requestAnimationFrame(() => showRoute());
 updateHeader();
 motion.enter(document.querySelector('.topbar'), 8, 850);
-document.querySelectorAll('.latest-title, .browse-toolbar, .footer-newsletter, .footer-column, .footer-bottom').forEach((element, index) => motion.reveal(element, (index % 3) * 70));
+document.querySelectorAll('.featured-link, .latest-title, .browse-toolbar, .footer-newsletter, .footer-column, .footer-bottom').forEach((element, index) => motion.reveal(element, (index % 3) * 70));
 
 // Collegare i servizi e i riferimenti ufficiali prima di attivare le iscrizioni.
 document.querySelector('#copyright-year').textContent = new Intl.DateTimeFormat('it-IT', {

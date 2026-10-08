@@ -6,16 +6,14 @@
   <meta name="theme-color" content="#000000">
   <meta name="description" content="Il portfolio personale di Alessandro Rossi. Profilo, corporate, book, media e brand.">
   <title>Alessandro Rossi</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/raleway-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script src="motion.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
   <section class="hero" id="home" aria-label="Introduzione">
-    <!-- Sostituire il poster nero con il futuro video a tutto schermo. -->
+    <!-- Sostituire il poster nero con il futuro video di apertura. -->
     <img class="hero-poster" src="assets/hero-placeholder.svg" alt="" aria-hidden="true">
     <header class="topbar">
       <h1 class="wordmark"><a href="#home">ALESSANDRO ROSSI</a></h1>
@@ -24,7 +22,12 @@
         <a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#corporate">CORPORATE</a><a href="#book">BOOK</a><a href="#media">MEDIA</a><a href="#brand">BRAND</a>
       </nav>
     </header>
-    <a class="scroll-cue" href="#latest">SCOPRI</a>
+  </section>
+  <section class="featured-entry" aria-labelledby="featured-title">
+    <a class="featured-link" href="#latest">
+      <h2 id="featured-title">FEATURED WORKS</h2>
+      <span class="featured-handle" aria-hidden="true"></span>
+    </a>
   </section>
   <header class="site-header" id="site-header" hidden>
     <a class="wordmark" href="#home">ALESSANDRO ROSSI</a>
