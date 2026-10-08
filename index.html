@@ -1,29 +1,128 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Il mio sito</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Il portfolio personale di Alessandro Rossi. Profilo, corporate, book, media e brand.">
+  <title>Alessandro Rossi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="motion.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>Ciao! 👋</h1>
-  <p>Questo è il mio primo sito pubblicato con GitHub Pages.</p>
-
-  <h2>Chi sono</h2>
-  <p>
-    Sto costruendo il mio sito personale e questo è un contenuto di prova.
-  </p>
-
-  <h2>Progetti</h2>
-  <ul>
-    <li>Progetto 1</li>
-    <li>Progetto 2</li>
-    <li>Progetto 3</li>
-  </ul>
-
-  <p>
-    <a href="mailto:tuamail@example.com">Contattami</a>
-  </p>
+  <section class="hero" id="home" aria-label="Introduzione">
+    <!-- Sostituire il poster nero con il futuro video a tutto schermo. -->
+    <img class="hero-poster" src="assets/hero-placeholder.svg" alt="" aria-hidden="true">
+    <header class="topbar">
+      <h1 class="wordmark"><a href="#home">ALESSANDRO ROSSI</a></h1>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="hero-nav" aria-label="Apri il menu">MENU +</button>
+      <nav class="nav" id="hero-nav" aria-label="Menu principale">
+        <a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#corporate">CORPORATE</a><a href="#book">BOOK</a><a href="#media">MEDIA</a><a href="#brand">BRAND</a>
+      </nav>
+    </header>
+    <a class="scroll-cue" href="#latest">SCOPRI</a>
+  </section>
+  <header class="site-header" id="site-header" hidden>
+    <a class="wordmark" href="#home">ALESSANDRO ROSSI</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="scroll-nav" aria-label="Apri il menu">MENU +</button>
+    <nav class="nav" id="scroll-nav" aria-label="Menu principale">
+      <a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#corporate">CORPORATE</a><a href="#book">BOOK</a><a href="#media">MEDIA</a><a href="#brand">BRAND</a>
+    </nav>
+  </header>
+  <main id="latest" class="latest">
+    <div class="latest-inner">
+      <h2 class="latest-title">Latest</h2>
+      <div class="browse-toolbar">
+        <nav class="category-nav" aria-label="Seleziona una categoria">
+          <a class="category-pill" href="#latest" data-category="all" aria-current="true">ALL<span class="pill-fill" aria-hidden="true">ALL</span></a>
+          <a class="category-pill" href="#about" data-category="about">ABOUT<span class="pill-fill" aria-hidden="true">ABOUT</span></a>
+          <a class="category-pill" href="#corporate" data-category="corporate">CORPORATE<span class="pill-fill" aria-hidden="true">CORPORATE</span></a>
+          <a class="category-pill" href="#book" data-category="book">BOOK<span class="pill-fill" aria-hidden="true">BOOK</span></a>
+          <a class="category-pill" href="#media" data-category="media">MEDIA<span class="pill-fill" aria-hidden="true">MEDIA</span></a>
+          <a class="category-pill" href="#brand" data-category="brand">BRAND<span class="pill-fill" aria-hidden="true">BRAND</span></a>
+        </nav>
+        <form class="search" role="search">
+          <label class="visually-hidden" for="search-input">Cerca nel portfolio</label>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+          <input id="search-input" type="search" placeholder="CERCA" autocomplete="off">
+        </form>
+      </div>
+      <p id="results-status" class="visually-hidden" role="status" aria-live="polite"></p>
+      <div class="project-grid" id="project-grid"></div>
+      <p class="empty-state" id="empty-state" hidden>Nessun risultato. Prova un’altra ricerca o seleziona ALL.</p>
+      <article class="project-detail" id="project-detail" tabindex="-1" hidden>
+        <a class="back-link" id="back-link" href="#latest">← TORNA ALLA SELEZIONE</a>
+        <p class="detail-category" id="detail-category"></p>
+        <h2 id="detail-title"></h2>
+        <button class="detail-zoom" id="image-open" type="button" aria-label="Apri l’immagine a schermo intero">
+          <img class="detail-image" id="detail-image" alt="">
+          <span class="zoom-hint" aria-hidden="true">+</span>
+        </button>
+        <div class="detail-copy" id="detail-copy"></div>
+      </article>
+      <noscript><p>Attiva JavaScript per sfogliare le categorie e aprire le schede del portfolio.</p></noscript>
+    </div>
+  </main>
+  <footer class="footer" id="footer">
+    <div class="footer-main">
+      <section class="footer-newsletter" aria-labelledby="newsletter-title">
+        <h2 id="newsletter-title">NEWSLETTER</h2>
+        <p>Ricevi le ultime novità sui progetti e sulle collaborazioni di Alessandro Rossi.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <label class="visually-hidden" for="newsletter-email">La tua email</label>
+          <input id="newsletter-email" name="email" type="email" autocomplete="email" placeholder="La tua email" required aria-describedby="newsletter-status">
+          <button type="submit" aria-label="Richiedi l’iscrizione alla newsletter">
+            <svg viewBox="0 0 28 20" fill="none" aria-hidden="true"><path d="M2 10h23M19 4l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <p class="newsletter-status" id="newsletter-status" role="status">Newsletter in arrivo.</p>
+      </section>
+      <nav class="footer-column" aria-labelledby="support-title">
+        <h2 id="support-title">SUPPORTO</h2>
+        <a href="#latest" id="footer-search">Cerca</a>
+        <button type="button" data-footer-info="contact">Contatti</button>
+        <a href="#about">About Alessandro</a>
+        <a href="#latest">Portfolio</a>
+      </nav>
+      <nav class="footer-column" aria-labelledby="terms-title">
+        <h2 id="terms-title">INFORMAZIONI</h2>
+        <button type="button" data-footer-info="privacy">Privacy Policy</button>
+        <button type="button" data-footer-info="cookies">Cookie</button>
+        <button type="button" data-footer-info="terms">Note legali</button>
+        <button type="button" data-footer-info="credits">Crediti</button>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-socials" aria-label="Profili social">
+        <button type="button" data-footer-info="facebook" aria-label="Facebook di Alessandro Rossi">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.5.7-1.5 1.5V12h2.6l-.4 2.9h-2.2v7A10 10 0 0 0 22 12Z"/></svg>
+        </button>
+        <button type="button" data-footer-info="instagram" aria-label="Instagram di Alessandro Rossi">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </button>
+      </div>
+      <p class="footer-copyright">© ALESSANDRO ROSSI <span id="copyright-year">2026</span></p>
+    </div>
+  </footer>
+  <dialog class="footer-dialog" id="footer-dialog" aria-labelledby="footer-dialog-title">
+    <button class="dialog-close" type="button" aria-label="Chiudi">×</button>
+    <h2 id="footer-dialog-title"></h2>
+    <p id="footer-dialog-text"></p>
+  </dialog>
+  <dialog class="mobile-menu" id="mobile-menu" aria-labelledby="mobile-menu-title">
+    <div class="drawer-heading"><span class="wordmark" id="mobile-menu-title">ALESSANDRO ROSSI</span><button class="dialog-close" type="button" aria-label="Chiudi il menu">×</button></div>
+    <form class="drawer-search" role="search"><label class="visually-hidden" for="drawer-search-input">Cerca nel portfolio</label><input id="drawer-search-input" type="search" placeholder="Cerca…" autocomplete="off"><button type="submit" aria-label="Cerca">↗</button></form>
+    <nav class="drawer-nav" aria-label="Menu mobile"></nav>
+  </dialog>
+  <dialog class="image-dialog" id="image-dialog" aria-label="Immagine a schermo intero">
+    <button class="dialog-close" type="button" aria-label="Chiudi immagine">×</button>
+    <button class="lightbox-zoom" type="button" aria-label="Ingrandisci immagine" aria-pressed="false">+</button>
+    <div class="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <p id="lightbox-caption"></p>
+  </dialog>
 </body>
 </html>
